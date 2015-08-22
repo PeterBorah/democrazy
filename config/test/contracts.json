@@ -1,1 +1,50 @@
-{}
+{
+  "Democrazy": {
+    "source": "/Users/peterbb/democrazy/contracts/Democrazy.sol",
+    "binary": "0x60606040526101b0806100136000396000f30060606040526000357c010000000000000000000000000000000000000000000000000000000090048063332d2b871461004f57806396a043d514610070578063f71d96cb146100835761004d565b005b61005a60045061019e565b6040518082815260200191505060405180910390f35b610081600480359060200150610101565b005b6100946004803590602001506100c0565b604051808273ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b600060005081815481101561000257906000526020600020900160009150909054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b80600060005060006000508054809190600101909081548183558181151161015b5781836000526020600020918201910161015a919061013c565b80821115610156576000818150600090555060010161013c565b5090565b5b505050815481101561000257906000526020600020900160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908302179055505b50565b600060006000505490506101ad565b9056",
+    "abi": [
+      {
+        "inputs": [],
+        "constant": false,
+        "name": "num_players",
+        "outputs": [
+          {
+            "type": "uint256",
+            "name": ""
+          }
+        ],
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "type": "address",
+            "name": "_player"
+          }
+        ],
+        "constant": false,
+        "name": "add_player",
+        "outputs": [],
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "type": "uint256",
+            "name": ""
+          }
+        ],
+        "constant": true,
+        "name": "players",
+        "outputs": [
+          {
+            "type": "address",
+            "name": ""
+          }
+        ],
+        "type": "function"
+      }
+    ],
+    "address": "0x3937461e2d953c0f28d83911ffae708a26b4ee18"
+  }
+}
