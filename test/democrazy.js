@@ -1,3 +1,5 @@
+
+
 contract('Democrazy', function(accounts) {
   it("should let you add a player", function(done) {
     var democrazy = Democrazy.at(Democrazy.deployed_address);
@@ -14,13 +16,27 @@ contract('Democrazy', function(accounts) {
 
   it("should let players add their commitments", function(done) {
     var democrazy = Democrazy.at(Democrazy.deployed_address);
-    var commitment = 0xf25fe1d943db0d3853b6931c487128a31c8adb972e15da792f090739ba3f1e06 //sha256 of "1foo"
+    var commitment = "0xf25fe1d943db0d3853b6931c487128a31c8adb972e15da792f090739ba3f1e06" //sha256 of "1foo"
 
     democrazy.add_player(accounts[0]).
       then(function() { return democrazy.commit(commitment) }).
       then(function() { return democrazy.commitments.call(accounts[0]) }).
       then(function(result) {
         assert.equal(result, commitment);
+        done();
+    }).catch(done);
+  });
+
+  it("should let commitments become votes", function(done) {
+    var democrazy = Democrazy.at(Democrazy.deployed_address);
+    var commitment = "0xf25fe1d943db0d3853b6931c487128a31c8adb972e15da792f090739ba3f1e06" //sha256 of "1foo"
+
+    democrazy.add_player(accounts[0]).
+      then(function() { return democrazy.commit(commitment) }).
+      then(function() { return democrazy.reveal(1, "foo") }).
+      then(function() { return democrazy.votes.call(accounts[0]) }).
+      then(function(result) {
+        assert.equal(result, 1);
         done();
     }).catch(done);
   });
