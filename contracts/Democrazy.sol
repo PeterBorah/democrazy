@@ -18,7 +18,7 @@ contract Democrazy {
     phase = 1;
   }
 
-  function set_admin(address _admin) {
+  function set_admin(address _admin) only_admin {
     admin = _admin;
   }
 
