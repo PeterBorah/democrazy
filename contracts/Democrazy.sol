@@ -1,13 +1,27 @@
 contract Democrazy {
   address[] public players;
+  mapping(address => bool) public is_player;
   mapping(address => bytes32) public commitments;
   mapping(address => uint8) public votes;
   mapping(address => uint) public balances;
   uint[3] public total_votes;
   uint public round;
+  address public admin;
 
-  function add_player(address _player) {
+  modifier only_admin { if (msg.sender == admin) _ }
+  modifier only_player { if (is_player[msg.sender] == true) _ }
+
+  function Democrazy() {
+    admin = msg.sender;
+  }
+
+  function set_admin(address _admin) {
+    admin = _admin;
+  }
+
+  function add_player(address _player) only_admin {
     players[players.length++] = _player;
+    is_player[_player] = true;
     balances[_player] = 10000;
   }
 
@@ -15,11 +29,11 @@ contract Democrazy {
     return players.length;
   }
 
-  function commit(bytes32 commitment) {
+  function commit(bytes32 commitment) only_player {
     commitments[msg.sender] = commitment;
   }
 
-  function reveal(uint8 vote, string seed) {
+  function reveal(uint8 vote, string seed) only_player {
     string memory vote_string;
 
     if (vote == 1) {
@@ -34,7 +48,7 @@ contract Democrazy {
     }
   }
 
-  function end_round() {
+  function end_round() only_admin {
     uint8 majority;
     uint8 minority;
     uint8 winning_team;
