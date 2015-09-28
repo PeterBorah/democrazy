@@ -7,12 +7,15 @@ contract Democrazy {
   uint[3] public total_votes;
   uint public round;
   address public admin;
+  uint public phase;
 
   modifier only_admin { if (msg.sender == admin) _ }
   modifier only_player { if (is_player[msg.sender] == true) _ }
 
   function Democrazy() {
     admin = msg.sender;
+    round = 1;
+    phase = 1;
   }
 
   function set_admin(address _admin) {
@@ -30,25 +33,38 @@ contract Democrazy {
   }
 
   function commit(bytes32 commitment) only_player {
-    commitments[msg.sender] = commitment;
+    if (phase == 1) {
+      commitments[msg.sender] = commitment;
+    }
   }
 
   function reveal(uint8 vote, string seed) only_player {
-    string memory vote_string;
+    if (phase == 2) {
+      string memory vote_string;
 
-    if (vote == 1) {
-      vote_string = "1";
-    } else {
-      vote_string = "2";
-    }
+      if (vote == 1) {
+        vote_string = "1";
+      } else {
+        vote_string = "2";
+      }
 
-    if (sha256(vote_string, seed) == commitments[msg.sender]) {
-      votes[msg.sender] = vote;
-      total_votes[vote] += 1;
+      if (sha256(vote_string, seed) == commitments[msg.sender]) {
+        votes[msg.sender] = vote;
+        total_votes[vote] += 1;
+      }
     }
   }
 
-  function end_round() only_admin {
+  function advance_phase() only_admin {
+    if (phase == 1) {
+      phase = 2;
+    } else {
+      phase = 1;
+      end_round();
+    }
+  }
+
+  function end_round() private {
     uint8 majority;
     uint8 minority;
     uint8 winning_team;
@@ -84,5 +100,4 @@ contract Democrazy {
     delete total_votes;
     round++;
   }
-
 }

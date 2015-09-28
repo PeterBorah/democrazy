@@ -33,6 +33,7 @@ contract('Democrazy', function(accounts) {
 
     democrazy.add_player(accounts[0]).
       then(function() { return democrazy.commit(commitment) }).
+      then(function() { return democrazy.advance_phase() }).
       then(function() { return democrazy.reveal(1, "foo") }).
       then(function() { return democrazy.votes.call(accounts[0]) }).
       then(function(result) {
@@ -53,17 +54,18 @@ contract('Democrazy', function(accounts) {
         then(function() { return democrazy.commit(commitment_1, {from: accounts[1]}) }).
         then(function() { return democrazy.add_player(accounts[2]) }).
         then(function() { return democrazy.commit(commitment_2, {from: accounts[2]}) }).
+        then(function() { return democrazy.advance_phase() }).
         then(function() { return democrazy.reveal(1, "foo") }).
         then(function() { return democrazy.reveal(1, "foo", {from: accounts[1]}) }).
         then(function() { return democrazy.reveal(2, "foo", {from: accounts[2]}) }).
-        then(function() { return democrazy.end_round() }).
+        then(function() { return democrazy.advance_phase() }).
         then(function() { return democrazy.balances.call(accounts[0]) }).
-        then(function(result) { assert.equal(result, 9900) }).
+        then(function(result) { assert.equal(result, 10050) }).
         then(function() { return democrazy.balances.call(accounts[1]) }).
-        then(function(result) { assert.equal(result, 9900) }).
+        then(function(result) { assert.equal(result, 10050) }).
         then(function() { return democrazy.balances.call(accounts[2]) }).
         then(function(result) {
-          assert.equal(result, 10200)
+          assert.equal(result, 9900)
           done();
       }).catch(done)
     }).catch(done)
